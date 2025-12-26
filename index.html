@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 2026 Krypton Homies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Michroma&family=Space+Grotesk:wght@300;500&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #000;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow: hidden; 
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+
+        .card {
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 242, 96, 0.4);
+            border-radius: 30px;
+            padding: 2.5rem;
+            max-width: 680px;
+            width: 92%;
+            text-align: center;
+            z-index: 10;
+            box-shadow: 0 0 60px rgba(0, 242, 96, 0.15);
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        h1 { 
+            font-family: 'Bebas Neue', sans-serif; 
+            font-size: 3.5rem; 
+            letter-spacing: 4px;
+            margin-bottom: 0.2rem; 
+        }
+
+        .year-anim { 
+            color: #00f260; 
+            animation: pulse 2s infinite; 
+            display: inline-block;
+            text-shadow: 0 0 20px rgba(0, 242, 96, 0.7);
+        }
+
+        .clickable-title {
+            font-family: 'Michroma', sans-serif;
+            font-size: 0.9rem;
+            color: #00f260;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            transition: 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 10px 20px;
+            border: 1px solid rgba(0, 242, 96, 0.3);
+            border-radius: 50px;
+        }
+        .clickable-title:hover {
+            background: rgba(0, 242, 96, 0.2);
+            box-shadow: 0 0 20px #00f260;
+            transform: scale(1.05);
+        }
+
+        .country-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .country-tag {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            color: #00f260;
+            font-family: 'Michroma', sans-serif;
+        }
+
+        .message { 
+            line-height: 1.6; 
+            margin-bottom: 1rem; 
+            font-size: 0.95rem; 
+            color: #ccc; 
+            font-weight: 300;
+        }
+        .highlight { color: #00f260; font-weight: 600; }
+
+        .signature { 
+            margin-top: 1.5rem; 
+            font-family: 'Michroma', sans-serif; 
+            font-size: 1.1rem; 
+            color: #00f260; 
+        }
+
+        /* MODAL STYLE */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            backdrop-filter: blur(15px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(15, 15, 15, 0.98);
+            border: 1px solid #00f260;
+            width: 90%;
+            max-width: 900px;
+            max-height: 85vh;
+            border-radius: 25px;
+            padding: 2.5rem;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            color: #00f260;
+            font-size: 2.5rem;
+            cursor: pointer;
+        }
+
+        .homies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .homie-name {
+            background: rgba(0, 242, 96, 0.05);
+            border: 1px solid rgba(0, 242, 96, 0.15);
+            padding: 12px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #fff;
+            text-align: center;
+            transition: 0.3s;
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .homie-name:hover {
+            background: #00f260;
+            color: #000;
+            transform: translateY(-3px);
+            font-weight: bold;
+        }
+
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2.5rem; }
+            .homies-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="card">
+        <h1>HAPPY <span class="year-anim">2026</span></h1>
+        
+        <div class="clickable-title" onclick="openModal()">
+            Krypton Homies (70)
+        </div>
+        
+        <p class="message">
+            As we step into 2026, I’ve been reflecting on how lucky I am. Creating this international GC was one thing, but connecting with all of you was a blessing I didn't expect.
+        </p>
+
+        <div class="country-grid">
+            <div class="country-tag">Indian</div>
+            <div class="country-tag">Bangladeshi</div>
+            <div class="country-tag">Nepali</div>
+            <div class="country-tag">Philippines</div>
+            <div class="country-tag">UAE</div>
+            <div class="country-tag">Saudi Arab</div>
+            <div class="country-tag">Kenya</div>
+            <div class="country-tag">SA</div>
+            <div class="country-tag">Hungary</div>
+            <div class="country-tag">Canada</div>
+            <div class="country-tag">America</div>
+            <div class="country-tag">Australia</div>
+            <div class="country-tag">Finland</div>
+            <div class="country-tag">Italy</div>
+        </div>
+
+        <p class="message">
+            I genuinely love you guys. When you are offline, I honestly miss the energy. You aren't just names on a screen; <span class="highlight">you are my family.</span>
+        </p>
+
+        <p class="message">
+            I promise to support you and I want to meet y'all, <span class="highlight">In Shaa Allah.</span> Good luck and have fun my Krypton homies.
+        </p>
+
+        <div class="signature">- Zubayer Utsho</div>
+    </div>
+
+    <div id="homiesModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 style="font-family: 'Bebas Neue'; color: #00f260; font-size: 2.5rem; text-align: center;">MY TOP 70</h2>
+            <div class="homies-grid" id="homiesContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // YOUR UPDATED LIST OF 70 NAMES
+        const homiesList = [
+            "Sneha", "Moon", "Sofiya", "Minnie", "Yvie", "Queen", "Tanie",
+            "Lisa", "Nelly", "Lia", "Sheneza", "Nadia", "Mehek", "Muffin", "Prity", "Naomi",
+            "Lucy", "Mariah", "Nimo", "Luke", "Stromi", "Hannah", "Oliveri", "Mardiya", "Chris",
+            "Emily", "Kris", "Shinobu", "Hu", "Neto", "Kaye", "Ri", "Ethan", "Aru", "Chelsea", "Issac", "Tiane", "Tramzy", "Zell",
+            "Yumi", "Cute Ko", "Amane", "Burt", "Suli", "Aury", "Sheki", "Jazzy", "Adri", "Ella", "Em", "Mooniee", "Mocca", "Zallia",
+            "Lex", "Lexine", "Avoy", "Kiki", "Kathryne", "Jay", "Gelaica", "Daisy", "Ak", "Jed", "Ana", "Jillianne", "Jojo", "Ella", "Ela", "Maria", "Rain"
+        ];
+
+        const container = document.getElementById('homiesContainer');
+        homiesList.forEach(name => {
+            const div = document.createElement('div');
+            div.className = 'homie-name';
+            div.innerText = name;
+            container.appendChild(div);
+        });
+
+        function openModal() { document.getElementById("homiesModal").style.display = "flex"; }
+        function closeModal() { document.getElementById("homiesModal").style.display = "none"; }
+        window.onclick = (e) => { if(e.target.className === 'modal') closeModal(); }
+
+        // --- FIREWORKS ---
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let fireworks = [], particles = [];
+
+        class Firework {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height;
+                this.sx = Math.random() * 2 - 1;
+                this.sy = Math.random() * -3 - 3;
+                this.hue = Math.random() * 360;
+            }
+            update() { this.x += this.sx; this.y += this.sy; this.sy += 0.05; }
+            draw() {
+                ctx.fillStyle = `hsl(${this.hue}, 100%, 60%)`;
+                ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+
+        class Particle {
+            constructor(x, y, hue) {
+                this.x = x; this.y = y; this.hue = hue;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 6 - 3;
+                this.speedY = Math.random() * 6 - 3;
+                this.life = 100;
+            }
+            update() { this.x += this.speedX; this.y += this.speedY; this.life -= 2; }
+            draw() {
+                ctx.fillStyle = `hsla(${this.hue}, 100%, 60%, ${this.life / 100})`;
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            if (Math.random() < 0.05) fireworks.push(new Firework());
+            fireworks.forEach((f, i) => {
+                f.update(); f.draw();
+                if (f.sy >= -0.5) {
+                    for (let j = 0; j < 35; j++) particles.push(new Particle(f.x, f.y, f.hue));
+                    fireworks.splice(i, 1);
+                }
+            });
+            particles.forEach((p, i) => {
+                p.update(); p.draw();
+                if (p.life <= 0) particles.splice(i, 1);
+            });
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+        animate();
+    </script>
+</body>
+</html>
